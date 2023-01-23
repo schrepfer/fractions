@@ -95,6 +95,11 @@ def _define_flags() -> argparse.Namespace:
       help='require the canonical answer, i.e. 1-3/8',
   )
   parser.add_argument(
+      '-~', '-e', '--estimate',
+      action='store_true',
+      help='show the estimated value too, i.e. 1.375',
+  )
+  parser.add_argument(
       '-V', '--version',
       action='version',
       version='fractions version 0.1',
@@ -114,6 +119,10 @@ _WHOLE_FORMAT = re.compile(r'(?P<whole>\d+)-(?P<num>\d+)/(?P<denom>\d+)')
 
 
 class Fraction(fractions.Fraction):
+
+  @property
+  def estimate(self) -> float:
+    return float(self.numerator) / self.denominator
 
   def __str__(self) -> str:
     if self.numerator >= self.denominator:
@@ -298,7 +307,8 @@ def main(args: argparse.Namespace) -> int:
           or (not args.canonical and got == guess.want)):  # Value
         print('✔️  '
               + random.choice(_ENCOURAGEMENT)
-              + (f' ({guess.want})' if not args.canonical else ''))
+              + (f' ({guess.want})' if not args.canonical else '')
+              + (f' [{guess.want.estimate}]' if args.estimate else ''))
         correct += 1
         repeat = False
       else:
