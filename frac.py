@@ -57,7 +57,7 @@ class Operator(enum.Enum):
     return self.display
 
 
-def _define_flags() -> argparse.Namespace:
+def define_flags() -> argparse.Namespace:
   """Define the flags."""
   parser = argparse.ArgumentParser(description=__doc__)
   # See: http://docs.python.org/3/library/argparse.html
@@ -345,7 +345,7 @@ def main(args: argparse.Namespace) -> int:
 
 
 if __name__ == '__main__':
-  a = _define_flags()
+  a = define_flags()
   logging.basicConfig(
       level=a.verbosity,
       datefmt='%Y/%m/%d %H:%M:%S',
